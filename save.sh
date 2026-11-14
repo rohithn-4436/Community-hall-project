@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# Move to the project directory
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit 1
 
-# Check whether a commit message was provided
 if [ "$#" -eq 0 ]; then
-    echo "Usage: ./save.sh \"Your commit message\""
+    echo 'Usage: ./save.sh "commit message"'
     exit 1
 fi
 
-# Add, commit and push
-git add .
-git commit -m "$*"
-git push
+git add . || exit 1
+
+git commit -m "$*" || exit 1
+
+git push || exit 1
+
+echo "Project successfully pushed to GitHub!"
