@@ -42,32 +42,6 @@ main {
     border-radius: 10px;
 }
 
-/* Individual hall cards */
-.hall-card {
-    background-color: white;
-
-    /* Space inside the card */
-    padding: 40px;
-
-    /* Border around the card */
-    border: 5px solid red;
-
-    /* Space outside the card */
-    margin: 40px;
-
-    /* Rounded corners */
-    border-radius: 10px;
-
-    /*height and width*/
-    width: 300px;
-    min-height: 150px;
-
-    /*box size*/
-    box-sizing: border-box;
-
-    position: relative;
-}
-
 .hall-card h3 {
     color: #1e3a8a;
 }
@@ -84,23 +58,6 @@ footer {
     color: white;
     text-align: center;
     border-radius: 10px;
-}
-.hall-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.hall-card {
-    box-sizing: border-box;
-    width: 280px;
-    padding: 20px;
-    border: 2px solid #1e3a8a;
-    border-radius: 10px;
-    background-color: white;
 }
 .availability{
     position: absolute;
@@ -129,6 +86,19 @@ footer {
 }
 .hall-grid{
     display:grid;
-    grid-template-columns: repeat(autofit,minmax(220px,1fr)) ;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr)) ;
     gap: 20px;
+}
+.hall-card {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 150px;
+    padding: 20px;
+    margin: 0;
+
+    border: 2px solid #1e3a8a;
+    border-radius: 10px;
+
+    background-color: white;
+    position: relative;
 }
