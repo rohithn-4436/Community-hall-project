@@ -41,11 +41,27 @@ main {
 
 /* Individual hall cards */
 .hall-card {
-    background-color: #eef3ff;
-    padding: 20px;
-    margin: 15px 0;
-    border-radius: 15px;
-    border: 3px solid #cbd5e1;
+    background-color: white;
+
+    /* Space inside the card */
+    padding: 40px;
+
+    /* Border around the card */
+    border: 5px solid red;
+
+    /* Space outside the card */
+    margin: 40px;
+
+    /* Rounded corners */
+    border-radius: 10px;
+
+    /*height and width*/
+    width: 300px;
+    min-height: 150px;
+
+    /*box size*/
+    box-sizing: border-box;
+}
 }
 
 .hall-card h3 {
