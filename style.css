@@ -81,3 +81,20 @@ footer {
     text-align: center;
     border-radius: 10px;
 }
+.hall-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.hall-card {
+    box-sizing: border-box;
+    width: 280px;
+    padding: 20px;
+    border: 2px solid #1e3a8a;
+    border-radius: 10px;
+    background-color: white;
+}
