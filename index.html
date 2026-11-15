@@ -27,6 +27,16 @@
         <a href = "https://www.google.com">Visit Google</a>        
         <br><br>
         <hr>
+        <main>
+            <section class="hall-card">
+                <h2>Community Hall A</h2>
+                <p>Capacity: 300 people</p>
+                <p>Location: Bengaluru</p>
+                <p>Status: Available</p>
+                <button id="bookButton">Book Now</button>
+                <p id="message"></p>
+            </section>
+        </main>
         <h2>Community Hall Booking Form</h2>
         <form>
             <label>Full Name:</label>
@@ -107,5 +117,14 @@
                 </tr>
             </tbody>
         </table>
+        <script>
+            const button = document.getElementById("bookButton");
+            const message = document.getElementById("message");
+            button.addEventListener("click", function() {
+                message.textContent = "Booking request submmitted!";
+                button.textContent = "Request submmitted!";
+                button.disabled= true;
+            });
+        </script>
     </body>
 </html>

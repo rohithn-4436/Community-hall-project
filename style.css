@@ -1,5 +1,5 @@
 
-/* General webpage styling */
+/* General webpage styling*/
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f6f9;
@@ -70,10 +70,6 @@ footer {
 }
 @media (max-width: 600px) {
 
-    .hall-container {
-        flex-direction: column;
-    }
-
     .hall-card {
         width: 100%;
     }
@@ -101,4 +97,37 @@ footer {
 
     background-color: white;
     position: relative;
+    font-family: Arial, sans-serif;
+
+    transition: transform 0.3s ease;
+}
+
+.hall-card h2 {
+    color: #1e3a8a;
+}
+
+.hall-card button {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.navigation a:hover {
+    color: yellow;
+}
+.hall-card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+}
+input:focus,textarea:focus,select:focus{
+    outline: 2px solid #2563eb;
+    background-color: #f0f7ff;
+    transition: background-color 0.3s ease;
+}
+.hall-card button:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
 }
