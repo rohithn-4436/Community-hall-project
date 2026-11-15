@@ -127,3 +127,8 @@ footer {
     }
 
 }
+.hall-grid{
+    display:grid;
+    grid-template-columns: repeat(autofit,minmax(220px,1fr)) ;
+    gap: 20px;
+}
