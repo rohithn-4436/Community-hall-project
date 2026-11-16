@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Hall Availability</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header class="site-header">
+        <a class="brand" href="{{ url_for('home') }}">
+            Community<span>Hall</span>
+        </a>
+        <nav class="navigation">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('booking_status') }}">Check Booking</a>
+        </nav>
+    </header>
+
+    <main class="booking-status-container">
+
+        <h2>Check Hall Availability</h2>
+        <p>Select a hall and date to see existing bookings.</p>
+
+        <form method="POST" action="{{ url_for('check_availability') }}">
+
+            <label for="hall">Select Hall</label>
+            <select id="hall" name="hall" required>
+                <option value="">Choose a hall</option>
+
+                <option value="Hall A"
+                    {% if selected_hall == "Hall A" %}selected{% endif %}>
+                    Hall A (300 Guests)
+                </option>
+
+                <option value="Hall B"
+                    {% if selected_hall == "Hall B" %}selected{% endif %}>
+                    Hall B (150 Guests)
+                </option>
+
+                <option value="Hall C"
+                    {% if selected_hall == "Hall C" %}selected{% endif %}>
+                    Hall C (100 Guests)
+                </option>
+            </select>
+
+            <label for="date">Select Date</label>
+            <input
+                type="date"
+                id="date"
+                name="date"
+                value="{{ selected_date }}"
+                min="{{ today }}"
+                required
+            >
+            
+            <label for="start_time">Starting Time</label>
+            <input
+                type="time"
+                id="start_time"
+                name="start_time"
+                required
+            >
+
+            <label for="end_time">Ending Time</label>
+            <input
+                type="time"
+                id="end_time"
+                name="end_time"
+                required
+            >
+
+            <button type="submit">Check Availability</button>
+
+        </form>
+
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+
+        {% if results %}
+            <section class="booking-result">
+                <h2>Existing Bookings</h2>
+
+                {% for booking in results %}
+                    <p>
+                        {{ booking.start_time }} - {{ booking.end_time }}
+                        ({{ booking.status }})
+                    </p>
+                {% endfor %}
+
+                <p>
+                    These time slots are occupied. Choose another time.
+                </p>
+            </section>
+
+        {% elif selected_hall and selected_date and not error %}
+            <section class="booking-result">
+                <h2>Hall Available!</h2>
+                <p>No existing bookings were found for this date.</p>
+            </section>
+        {% endif %}
+
+        <a href="{{ url_for('home') }}">Back to Home</a>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Community Hall</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="site-header">
+    <a class="brand" href="/">Community<span>Hall</span></a>
+    <nav class="navigation">
+        <a href="/">Home</a>
+        <a href="/admin">Admin Dashboard</a>
+        <a href="/admin/logout">Logout</a>
+    </nav>
+</header>
+
+<main class="section">
+    <div class="section-heading">
+        <p class="eyebrow">ADMINISTRATION</p>
+        <h2>Booking Management Dashboard</h2>
+        <p>Review and manage community hall booking requests.</p>
+    </div>
+
+    <div class="admin-summary">
+        <div class="summary-card">
+            <h3>{{ bookings|length }}</h3>
+            <p>Total Bookings</p>
+        </div>
+        <div class="summary-card">
+            <h3>{{ bookings|selectattr('status', 'equalto', 'Pending')|list|length }}</h3>
+            <p>Pending Requests</p>
+        </div>
+        <div class="summary-card">
+            <h3>{{ bookings|selectattr('status', 'equalto', 'Approved')|list|length }}</h3>
+            <p>Approved</p>
+        </div>
+        <div class="summary-card">
+            <h3>{{ bookings|selectattr('status', 'equalto', 'Rejected')|list|length }}</h3>
+            <p>Rejected</p>
+        </div>
+    </div>
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Hall</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Guests</th>
+                    <th>Event</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>#{{ booking.id }}</td>
+                    <td>
+                        <strong>{{ booking.full_name }}</strong>
+                        <br>{{ booking.email }}
+                        <br>{{ booking.phone }}
+                    </td>
+                    <td>{{ booking.hall }}</td>
+                    <td>{{ booking.booking_date }}</td>
+                    <td>{{ booking.start_time }} - {{ booking.end_time }}</td>
+                    <td>{{ booking.guests }}</td>
+                    <td>{{ booking.event_type }}</td>
+                    <td>
+                        <span class="status-badge {{ booking.status|lower }}">
+                            {{ booking.status }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if booking.status == 'Pending' %}
+                        <button class="approve-button"
+                            onclick="updateStatus({{ booking.id }}, 'Approved')">
+                            Approve
+                        </button>
+                        <button class="reject-button"
+                            onclick="updateStatus({{ booking.id }}, 'Rejected')">
+                            Reject
+                        </button>
+                        {% else %}
+                        <span>Processed</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="9">No booking requests found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <p id="adminMessage" class="form-message" aria-live="polite"></p>
+</main>
+
+<footer class="footer">
+    <h2>Community Hall Management System</h2>
+    <p>Administrator Dashboard</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

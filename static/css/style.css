@@ -1,0 +1,571 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+.site-header {
+    min-height: 75px;
+    padding: 15px 7%;
+    background: #172554;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.brand span {
+    color: #93c5fd;
+}
+
+.navigation {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.navigation a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.navigation a:hover {
+    color: #93c5fd;
+}
+
+.hero {
+    min-height: 440px;
+    padding: 70px 9%;
+    background: linear-gradient(120deg, #172554, #1d4ed8);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.hero-content {
+    max-width: 620px;
+}
+
+.eyebrow {
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+.hero .eyebrow {
+    color: #bfdbfe;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.15;
+    margin-bottom: 20px;
+}
+
+.hero-content > p:not(.eyebrow) {
+    color: #dbeafe;
+    margin-bottom: 30px;
+}
+
+.hero-decoration {
+    text-align: center;
+    min-width: 200px;
+    color: #dbeafe;
+}
+
+.hero-icon {
+    font-size: 115px;
+}
+
+.primary-button {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 13px 22px;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.primary-button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.section {
+    padding: 70px 7%;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.section-heading h2 {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.section-heading > p:last-child {
+    color: #64748b;
+}
+
+.hall-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.hall-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hall-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(15, 23, 42, 0.12);
+}
+
+.hall-image {
+    height: 150px;
+    display: grid;
+    place-items: center;
+    font-size: 65px;
+}
+
+.hall-image-one {
+    background: #dbeafe;
+}
+
+.hall-image-two {
+    background: #fce7f3;
+}
+
+.hall-image-three {
+    background: #dcfce7;
+}
+
+.hall-content {
+    padding: 22px;
+}
+
+.status {
+    display: inline-block;
+    background: #dcfce7;
+    color: #166534;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.hall-content h3 {
+    margin: 12px 0 8px;
+    color: #172554;
+    font-size: 21px;
+}
+
+.hall-content > p {
+    color: #64748b;
+    font-size: 14px;
+    min-height: 45px;
+}
+
+.hall-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 18px 0;
+    font-size: 12px;
+}
+
+.book-button {
+    width: 100%;
+    padding: 11px;
+    background: #172554;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.book-button:hover {
+    background: #2563eb;
+    transform: scale(1.02);
+}
+
+.facilities-section {
+    background: #eff6ff;
+    padding: 65px 7%;
+}
+
+.facility-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.facility {
+    background: white;
+    text-align: center;
+    padding: 25px 15px;
+    border-radius: 10px;
+    font-size: 32px;
+}
+
+.facility h3 {
+    font-size: 17px;
+    margin: 8px 0;
+}
+
+.facility p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.booking-section {
+    background: white;
+}
+
+.booking-form {
+    max-width: 850px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font: inherit;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: 2px solid #2563eb;
+    border-color: transparent;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.submit-button {
+    margin-top: 22px;
+}
+
+.form-message {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.footer {
+    background: #172554;
+    color: white;
+    text-align: center;
+    padding: 35px 15px;
+}
+
+.footer h2 {
+    margin-bottom: 8px;
+}
+
+.footer p {
+    color: #cbd5e1;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+@media (max-width: 650px) {
+    .site-header {
+        flex-direction: column;
+    }
+
+    .navigation {
+        justify-content: center;
+        gap: 13px;
+    }
+
+    .hero {
+        text-align: center;
+        flex-direction: column;
+        padding: 55px 7%;
+    }
+
+    .hero-decoration {
+        display: none;
+    }
+
+    .section {
+        padding: 50px 5%;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
+
+    .booking-form {
+        padding: 20px;
+    }
+}
+
+.admin-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 22px;
+    text-align: center;
+}
+
+.summary-card h3 {
+    font-size: 30px;
+    color: #1d4ed8;
+}
+
+.summary-card p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.admin-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 13px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.admin-table th {
+    background: #172554;
+    color: white;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.status-badge.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.approved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.approve-button,
+.reject-button {
+    padding: 7px 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.approve-button {
+    background: #15803d;
+}
+
+.reject-button {
+    background: #dc2626;
+}
+
+.approve-button:hover,
+.reject-button:hover {
+    opacity: 0.8;
+}
+
+.login-container {
+    min-height: 75vh;
+    display: grid;
+    place-items: center;
+    padding: 30px 15px;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 35px;
+    box-shadow: 0 5px 25px rgba(15, 23, 42, 0.08);
+}
+
+.login-form h2 {
+    margin-bottom: 8px;
+}
+
+.login-form > p:not(.eyebrow) {
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.login-form .form-group {
+    margin-bottom: 18px;
+}
+
+.login-form .primary-button {
+    width: 100%;
+}
+
+.login-error {
+    color: #dc2626 !important;
+    background: #fee2e2;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+/* Booking Status Page */
+
+.booking-status-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.booking-status-container h2 {
+    color: #1e3a8a;
+    margin-bottom: 15px;
+}
+
+.booking-status-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.booking-status-container input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.booking-status-container button {
+    padding: 12px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.booking-status-container button:hover {
+    background-color: #172554;
+}
+
+.booking-result {
+    margin-top: 25px;
+    padding: 20px;
+    background-color: #f4f6f9;
+    border-radius: 8px;
+}
+
+.error-message {
+    color: #dc2626;
+    margin-top: 15px;
+}
+
+.booking-status {
+    font-weight: bold;
+}

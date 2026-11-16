@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Hall | Book Your Event Space</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body> 
+    <header class="site-header">
+        <a class="brand" href="#home">Community<span>Hall</span></a>
+
+        <nav class="navigation">
+            <a href="#home">Home</a>
+            <a href="#halls">Our Halls</a>
+            <a href="#facilities">Facilities</a>
+            <a href="#booking">Book Now</a>
+            <a href="{{ url_for('booking_status') }}">Check Booking</a>
+            <a href="{{ url_for('check_availability') }}">Check Availability</a>
+        </nav>
+    </header>
+
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <p class="eyebrow">YOUR EVENT, OUR SPACE</p>
+                <h1>Find the perfect space for your special moments.</h1>
+                <p>
+                    Discover community halls for weddings, celebrations,
+                    meetings and memorable events in Bengaluru.
+                </p>
+                <a class="primary-button" href="#halls">Explore Halls</a>
+            </div>
+            <div class="hero-decoration">
+                <div class="hero-icon">🏛️</div>
+                <p>Celebrate together</p>
+            </div>
+        </section>
+
+        <section class="section" id="halls">
+            <div class="section-heading">
+                <p class="eyebrow">OUR SPACES</p>
+                <h2>Explore Our Community Halls</h2>
+                <p>Choose a space that suits your event and your guests.</p>
+            </div>
+
+            <div class="hall-grid">
+                <article class="hall-card">
+                    <div class="hall-image hall-image-one">🏛️</div>
+                    <div class="hall-content">
+                        <span class="status">Available for booking</span>
+                        <h3>Community Hall A</h3>
+                        <p>Spacious hall for weddings and large celebrations.</p>
+                        <div class="hall-details">
+                            <span>👥 300 guests</span>
+                            <span>📍 Bengaluru</span>
+                        </div>
+                        <button class="book-button" data-hall="Hall A">Book this hall</button>
+                    </div>
+                </article>
+
+                <article class="hall-card">
+                    <div class="hall-image hall-image-two">🎉</div>
+                    <div class="hall-content">
+                        <span class="status">Available for booking</span>
+                        <h3>Community Hall B</h3>
+                        <p>A comfortable venue for birthdays and family events.</p>
+                        <div class="hall-details">
+                            <span>👥 150 guests</span>
+                            <span>📍 Bengaluru</span>
+                        </div>
+                        <button class="book-button" data-hall="Hall B">Book this hall</button>
+                    </div>
+                </article>
+
+                <article class="hall-card">
+                    <div class="hall-image hall-image-three">🤝</div>
+                    <div class="hall-content">
+                        <span class="status">Available for booking</span>
+                        <h3>Community Hall C</h3>
+                        <p>Ideal for meetings, workshops and community events.</p>
+                        <div class="hall-details">
+                            <span>👥 100 guests</span>
+                            <span>📍 Bengaluru</span>
+                        </div>
+                        <button class="book-button" data-hall="Hall C">Book this hall</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="facilities-section" id="facilities">
+            <div class="section-heading">
+                <p class="eyebrow">WHAT WE OFFER</p>
+                <h2>Facilities for Your Events</h2>
+            </div>
+
+            <div class="facility-grid">
+                <div class="facility">🚗 <h3>Parking</h3><p>Convenient parking space</p></div>
+                <div class="facility">🔊 <h3>Sound System</h3><p>Audio facilities for events</p></div>
+                <div class="facility">🎤 <h3>Stage</h3><p>Dedicated stage arrangements</p></div>
+                <div class="facility">🪑 <h3>Seating</h3><p>Comfortable guest seating</p></div>
+            </div>
+        </section>
+
+        <section class="section booking-section" id="booking">
+            <div class="section-heading">
+                <p class="eyebrow">RESERVE YOUR SPACE</p>
+                <h2>Request a Hall Booking</h2>
+                <p>Enter your event details to submit a booking request.</p>
+            </div>
+
+            <form id="bookingForm" class="booking-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="full_name"
+                               placeholder="Your name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email"
+                               placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone"
+                               placeholder="Your phone number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hall">Select Hall</label>
+                        <select id="hall" name="hall" required>
+                            <option value="">Choose a hall</option>
+                            <option value="Hall A">Community Hall A</option>
+                            <option value="Hall B">Community Hall B</option>
+                            <option value="Hall C">Community Hall C</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Booking Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="guests">Number of Guests</label>
+                        <input type="number" id="guests" name="guests"
+                               min="1" max="300" placeholder="Expected guests" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventType">Event Type</label>
+                        <select id="eventType" name="event_type" required>
+                            <option value="">Choose event type</option>
+                            <option>Wedding</option>
+                            <option>Birthday</option>
+                            <option>Meeting</option>
+                            <option>Workshop</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startTime">Starting Time</label>
+                        <input type="time" id="startTime" name="start_time" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endTime">Ending Time</label>
+                        <input type="time" id="endTime" name="end_time" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="description">Event Description</label>
+                        <textarea id="description" name="description"
+                                  rows="4" placeholder="Tell us about your event"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-button submit-button">
+                    Submit Booking Request
+                </button>
+                <p id="formMessage" class="form-message" aria-live="polite"></p>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <h2>Community Hall Management System</h2>
+        <p>Making community events easier to organise.</p>
+        <p>© 2026 Community Hall. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

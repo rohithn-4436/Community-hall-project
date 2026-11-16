@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Booking Status | Community Hall</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header class="site-header">
+        <h1>Community Hall Management</h1>
+        <p>Check Your Booking Status</p>
+    </header>
+
+    <main class="booking-status-container">
+
+        <h2>Find Your Booking</h2>
+        <p>Enter your Booking ID and registered email address.</p>
+
+        <form method="POST" action="{{ url_for('booking_status') }}">
+
+            <label for="booking_id">Booking ID</label>
+            <input
+                type="number"
+                id="booking_id"
+                name="booking_id"
+                min="1"
+                required
+            >
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                required
+            >
+
+            <button type="submit">Check Status</button>
+
+        </form>
+
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+
+        {% if booking %}
+            <section class="booking-result">
+
+                <h2>Booking Details</h2>
+
+                <p><strong>Booking ID:</strong> {{ booking.id }}</p>
+                <p><strong>Name:</strong> {{ booking.full_name }}</p>
+                <p><strong>Hall:</strong> {{ booking.hall }}</p>
+                <p><strong>Date:</strong> {{ booking.booking_date }}</p>
+                <p><strong>Guests:</strong> {{ booking.guests }}</p>
+                <p><strong>Event:</strong> {{ booking.event_type }}</p>
+                <p><strong>Time:</strong>
+                    {{ booking.start_time }} - {{ booking.end_time }}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    <span class="booking-status">
+                        {{ booking.status }}
+                    </span>
+                </p>
+
+            </section>
+        {% endif %}
+
+        <a href="{{ url_for('home') }}">Back to Home</a>
+
+    </main>
+
+</body>
+</html>
