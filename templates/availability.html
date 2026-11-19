@@ -48,65 +48,74 @@
             </select>
 
             <label for="date">Select Date</label>
+            
             <input
-                type="date"
-                id="date"
-                name="date"
-                value="{{ selected_date }}"
-                min="{{ today }}"
-                required
+            type="date"
+            id="date"
+            name="date"
+            value="{{ selected_date }}"
+            min="{{ today }}"
+            required
             >
             
             <label for="start_time">Starting Time</label>
             <input
-                type="time"
-                id="start_time"
-                name="start_time"
-                required
+            type="time"
+            id="start_time"
+            name="start_time"
+            value="{{ start_time }}"
+            required
             >
-
+            
             <label for="end_time">Ending Time</label>
             <input
-                type="time"
-                id="end_time"
-                name="end_time"
-                required
+            type="time"
+            id="end_time"
+            name="end_time"
+            value="{{ end_time }}"
+            required
             >
-
+            
             <button type="submit">Check Availability</button>
-
+            
         </form>
-
+        
         {% if error %}
-            <p class="error-message">{{ error }}</p>
-        {% endif %}
+        <p class="error-message">{{ error }}</p>
+        
+        {% elif results %}
+        <section class="booking-result">
+            <h2>Time Slot Unavailable</h2>
+            
+            <p>
+                {{ selected_hall }} is occupied between
+            {{ start_time }} and {{ end_time }}.
+        </p>
 
-        {% if results %}
-            <section class="booking-result">
-                <h2>Existing Bookings</h2>
-
-                {% for booking in results %}
-                    <p>
-                        {{ booking.start_time }} - {{ booking.end_time }}
-                        ({{ booking.status }})
-                    </p>
-                {% endfor %}
-
-                <p>
-                    These time slots are occupied. Choose another time.
-                </p>
-            </section>
-
-        {% elif selected_hall and selected_date and not error %}
-            <section class="booking-result">
-                <h2>Hall Available!</h2>
-                <p>No existing bookings were found for this date.</p>
-            </section>
-        {% endif %}
-
-        <a href="{{ url_for('home') }}">Back to Home</a>
-
-    </main>
+        <h3>Conflicting Bookings</h3>
+        
+        {% for booking in results %}
+        <p>
+            {{ booking.start_time }} - {{ booking.end_time }}
+            ({{ booking.status }})
+        </p>
+        {% endfor %}
+    </section>
+    
+    {% elif selected_hall and selected_date and start_time and end_time %}
+    <section class="booking-result">
+        <h2>Time Slot Available!</h2>
+        
+        <p>
+            {{ selected_hall }} is available on {{ selected_date }}
+            from {{ start_time }} to {{ end_time }}.
+        </p>
+    </section>
+    {% endif %}
+    
+    <a href="{{ url_for('home') }}">Back to Home</a>
+    
+</main>
 
 </body>
 </html>

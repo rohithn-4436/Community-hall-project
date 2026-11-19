@@ -23,6 +23,13 @@
         <h2>Booking Management Dashboard</h2>
         <p>Review and manage community hall booking requests.</p>
     </div>
+    <div class="report-download">
+        <a href="{{ url_for('download_report') }}"
+        class="approve-button"
+        style="text-decoration: none; display: inline-block; padding: 12px 20px;">
+        Download Booking Report (CSV)
+        </a>
+    </div>
 
     <div class="admin-summary">
         <div class="summary-card">
@@ -42,6 +49,86 @@
             <p>Rejected</p>
         </div>
     </div>
+    
+    <!-- REPORTS AND ANALYTICS -->
+    <section class="analytics-section">
+        <div class="section-heading">
+            <p class="eyebrow">REPORTS</p>
+            <h2>Reports and Analytics</h2>
+            <p>Overview of bookings and hall maintenance.</p>
+        </div>
+        
+        <!-- Maintenance Summary -->
+        <div class="admin-summary">
+            <div class="summary-card">
+                <h3>{{ total_maintenance }}</h3>
+                <p>Total Maintenance</p>
+            </div>
+            
+            <div class="summary-card">
+                <h3>{{ scheduled_maintenance }}</h3>
+                <p>Scheduled Maintenance</p>
+            </div>
+        </div>
+        
+        <!-- Hall-wise Statistics -->
+        <div class="analytics-card">
+            <h3>Hall-wise Bookings</h3>
+            
+            {% for item in hall_stats %}
+            <p>
+                <strong>{{ item.hall }}</strong>:
+                {{ item.total }} bookings
+            </p>
+            {% else %}
+            <p>No booking statistics available.</p>
+            {% endfor %}
+        </div>
+        
+        <!-- Monthly Statistics -->
+        <div class="analytics-card">
+            <h3>Monthly Booking Report</h3>
+            
+            {% for item in monthly_stats %}
+            <p>
+                <strong>{{ item.month }}</strong>:
+                {{ item.total }} bookings
+            </p>
+            {% else %}
+            <p>No monthly records available.</p>
+            {% endfor %}
+        </div>
+        
+        <!-- Status Statistics -->
+        <div class="analytics-card">
+            <h3>Booking Status Report</h3>
+            
+            {% for item in status_stats %}
+            <p>
+                <strong>{{ item.status }}</strong>:
+                {{ item.total }} bookings
+            </p>
+            {% else %}
+            <p>No status records available.</p>
+            {% endfor %}
+        </div>
+        
+        <div class="analytics-card">
+            <h3>Booking Status Chart</h3>
+            <canvas id="statusChart"></canvas>
+        </div>
+        
+        <div class="analytics-card">
+            <h3>Hall-wise Booking Chart</h3>
+            <canvas id="hallChart"></canvas>
+        </div>
+        
+        <div class="analytics-card">
+            <h3>Monthly Booking Trend</h3>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+        
+    </section>
 
     <div class="admin-table-wrapper">
         <table class="admin-table">
@@ -110,5 +197,76 @@
 </footer>
 
 <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const statusData = {{ status_stats | tojson }};
+    const hallData = {{ hall_stats | tojson }};
+    const monthlyData = {{ monthly_stats | tojson }};
+
+    // Booking status chart
+    new Chart(document.getElementById("statusChart"), {
+        type: "doughnut",
+        data: {
+            labels: statusData.map(item => item.status),
+            datasets: [{
+                data: statusData.map(item => item.total)
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true
+        }
+    });
+
+    // Hall-wise booking chart
+    new Chart(document.getElementById("hallChart"), {
+        type: "bar",
+        data: {
+            labels: hallData.map(item => item.hall),
+            datasets: [{
+                label: "Total Bookings",
+                data: hallData.map(item => item.total)
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    // Monthly booking chart
+    new Chart(document.getElementById("monthlyChart"), {
+        type: "line",
+        data: {
+            labels: monthlyData.map(item => item.month),
+            datasets: [{
+                label: "Monthly Bookings",
+                data: monthlyData.map(item => item.total),
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>

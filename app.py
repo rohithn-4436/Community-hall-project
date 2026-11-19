@@ -1,5 +1,7 @@
+import csv
+from io import StringIO
 from flask import (
-    Flask, render_template, request, jsonify,
+    Flask, Response, render_template, request, jsonify,
     session, redirect, url_for
 )
 from functools import wraps
@@ -37,10 +39,12 @@ def get_db():
 
 
 # DATABASE INITIALIZATION
+
 def initialize_database():
     DATABASE.parent.mkdir(exist_ok=True)
 
     with get_db() as db:
+        # Existing bookings table
         db.execute("""
             CREATE TABLE IF NOT EXISTS bookings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,6 +63,19 @@ def initialize_database():
             )
         """)
 
+        # New maintenance table
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS maintenance (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                hall TEXT NOT NULL,
+                maintenance_date TEXT NOT NULL,
+                start_time TEXT NOT NULL,
+                end_time TEXT NOT NULL,
+                description TEXT NOT NULL,
+                status TEXT DEFAULT 'Scheduled',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
 
 # ADMIN AUTHENTICATION
 def admin_required(function):
@@ -100,6 +117,7 @@ def home():
 
 
 # CREATE BOOKING
+
 @app.route("/bookings", methods=["POST"])
 def create_booking():
     data = request.get_json(silent=True) or {}
@@ -139,6 +157,25 @@ def create_booking():
         }), 400
 
     with get_db() as db:
+
+        # Check scheduled maintenance
+        maintenance_conflict = db.execute("""
+            SELECT id FROM maintenance
+            WHERE hall = ?
+            AND maintenance_date = ?
+            AND status = 'Scheduled'
+            AND start_time < ?
+            AND end_time > ?
+        """, (
+            hall, data["date"], data["end_time"], data["start_time"]
+        )).fetchone()
+
+        if maintenance_conflict:
+            return jsonify({
+                "error": "This hall is unavailable due to scheduled maintenance during that time."
+            }), 409
+
+        # Check existing bookings
         conflict = db.execute("""
             SELECT id FROM bookings
             WHERE hall = ?
@@ -155,6 +192,7 @@ def create_booking():
                 "error": "This hall already has a booking during that time."
             }), 409
 
+        # Save booking
         cursor = db.execute("""
             INSERT INTO bookings (
                 full_name, email, phone, hall, booking_date,
@@ -181,19 +219,119 @@ def create_booking():
         "booking_id": booking_id
     }), 201
 
-
 # ADMIN DASHBOARD
+
 @app.route("/admin")
 @admin_required
 def admin_dashboard():
     with get_db() as db:
+        # Existing booking records
         bookings = db.execute("""
             SELECT * FROM bookings
             ORDER BY created_at DESC
         """).fetchall()
 
-    return render_template("admin.html", bookings=bookings)
+        # Total maintenance records
+        total_maintenance = db.execute("""
+            SELECT COUNT(*) FROM maintenance
+        """).fetchone()[0]
 
+        # Scheduled maintenance records
+        scheduled_maintenance = db.execute("""
+            SELECT COUNT(*) FROM maintenance
+            WHERE status = 'Scheduled'
+        """).fetchone()[0]
+
+        hall_stats = [
+            dict(row) for row in db.execute("""
+                SELECT hall, COUNT(*) AS total
+                FROM bookings
+                GROUP BY hall
+                ORDER BY total DESC
+            """).fetchall()
+        ]
+
+        monthly_stats = [
+            dict(row) for row in db.execute("""
+                SELECT
+                    strftime('%Y-%m', booking_date) AS month,
+                    COUNT(*) AS total
+                FROM bookings
+                GROUP BY month
+                ORDER BY month
+            """).fetchall()
+        ]
+
+        status_stats = [
+            dict(row) for row in db.execute("""
+                SELECT status, COUNT(*) AS total
+                FROM bookings
+                GROUP BY status
+            """).fetchall()
+        ]
+
+    return render_template(
+        "admin.html",
+        bookings=bookings,
+        total_maintenance=total_maintenance,
+        scheduled_maintenance=scheduled_maintenance,
+        hall_stats=hall_stats,
+        monthly_stats=monthly_stats,
+        status_stats=status_stats
+    )
+
+@app.route("/admin/download-report")
+@admin_required
+def download_report():
+    output = StringIO()
+    writer = csv.writer(output)
+
+    # CSV column headings
+    writer.writerow([
+        "Booking ID",
+        "Customer Name",
+        "Email",
+        "Phone",
+        "Hall",
+        "Booking Date",
+        "Guests",
+        "Event Type",
+        "Start Time",
+        "End Time",
+        "Status"
+    ])
+
+    with get_db() as db:
+        bookings = db.execute("""
+            SELECT * FROM bookings
+            ORDER BY booking_date DESC
+        """).fetchall()
+
+        for booking in bookings:
+            writer.writerow([
+                booking["id"],
+                booking["full_name"],
+                booking["email"],
+                booking["phone"],
+                booking["hall"],
+                booking["booking_date"],
+                booking["guests"],
+                booking["event_type"],
+                booking["start_time"],
+                booking["end_time"],
+                booking["status"]
+            ])
+
+    response = Response(
+        output.getvalue(),
+        mimetype="text/csv"
+    )
+
+    response.headers["Content-Disposition"] = (
+        "attachment; filename=community_hall_bookings.csv"
+    )
+
+    return response
 
 # APPROVE OR REJECT BOOKINGS
 @app.route("/admin/booking/<int:booking_id>/status", methods=["POST"])
@@ -246,25 +384,38 @@ def update_booking_status(booking_id):
         "message": f"Booking #{booking_id} {status.lower()} successfully."
     })
 
+
 @app.route("/check-availability", methods=["GET", "POST"])
 def check_availability():
     results = []
     error = None
     selected_hall = ""
     selected_date = ""
+    start_time = ""
+    end_time = ""
 
     if request.method == "POST":
         selected_hall = request.form.get("hall", "")
         selected_date = request.form.get("date", "")
+        start_time = request.form.get("start_time", "")
+        end_time = request.form.get("end_time", "")
 
         if selected_hall not in HALL_CAPACITIES:
             error = "Please select a valid hall."
+
         else:
             try:
                 booking_date = date.fromisoformat(selected_date)
 
+                datetime.strptime(start_time, "%H:%M")
+                datetime.strptime(end_time, "%H:%M")
+
                 if booking_date < date.today():
                     error = "Please select today or a future date."
+
+                elif end_time <= start_time:
+                    error = "Ending time must be after starting time."
+
                 else:
                     with get_db() as db:
                         results = db.execute("""
@@ -273,20 +424,30 @@ def check_availability():
                             WHERE hall = ?
                             AND booking_date = ?
                             AND status IN ('Pending', 'Approved')
+                            AND start_time < ?
+                            AND end_time > ?
                             ORDER BY start_time
-                        """, (selected_hall, selected_date)).fetchall()
+                        """, (
+                            selected_hall,
+                            selected_date,
+                            end_time,
+                            start_time
+                        )).fetchall()
 
             except ValueError:
-                error = "Please select a valid date."
+                error = "Please enter valid date and time details."
 
     return render_template(
         "availability.html",
         results=results,
         error=error,
-        today=date.today().isoformat(),
         selected_hall=selected_hall,
-        selected_date=selected_date
+        selected_date=selected_date,
+        start_time=start_time,
+        end_time=end_time,
+        today=date.today().isoformat()
     )
+
 
 @app.route("/booking-status", methods=["GET", "POST"])
 def booking_status():
@@ -317,6 +478,91 @@ def booking_status():
         booking=booking,
         error=error
     )
+
+@app.route("/admin/maintenance", methods=["GET", "POST"])
+@admin_required
+def maintenance():
+    error = None
+
+    if request.method == "POST":
+        hall = request.form.get("hall", "")
+        maintenance_date = request.form.get("maintenance_date", "")
+        start_time = request.form.get("start_time", "")
+        end_time = request.form.get("end_time", "")
+        description = request.form.get("description", "").strip()
+
+        try:
+            selected_date = date.fromisoformat(maintenance_date)
+            datetime.strptime(start_time, "%H:%M")
+            datetime.strptime(end_time, "%H:%M")
+
+            if hall not in HALL_CAPACITIES:
+                error = "Please select a valid hall."
+            elif selected_date < date.today():
+                error = "Maintenance date cannot be in the past."
+            elif end_time <= start_time:
+                error = "End time must be after start time."
+            elif not description:
+                error = "Please enter a description."
+            else:
+                with get_db() as db:
+                    conflict = db.execute("""
+                        SELECT id FROM maintenance
+                        WHERE hall = ?
+                        AND maintenance_date = ?
+                        AND status = 'Scheduled'
+                        AND start_time < ?
+                        AND end_time > ?
+                    """, (
+                        hall, maintenance_date, end_time, start_time
+                    )).fetchone()
+
+                    if conflict:
+                        error = "Another maintenance schedule overlaps this time."
+                    else:
+                        db.execute("""
+                            INSERT INTO maintenance
+                            (hall, maintenance_date, start_time,
+                             end_time, description)
+                            VALUES (?, ?, ?, ?, ?)
+                        """, (
+                            hall, maintenance_date, start_time,
+                            end_time, description
+                        ))
+
+        except ValueError:
+            error = "Please enter valid date and time details."
+
+    with get_db() as db:
+        maintenance_records = db.execute("""
+            SELECT * FROM maintenance
+            ORDER BY maintenance_date, start_time
+        """).fetchall()
+
+    return render_template(
+        "maintenance.html",
+        halls=HALL_CAPACITIES.keys(),
+        maintenance_records=maintenance_records,
+        today=date.today().isoformat(),
+        error=error
+    )
+
+@app.route("/admin/maintenance/<int:maintenance_id>/complete", methods=["POST"])
+@admin_required
+def complete_maintenance(maintenance_id):
+
+    with get_db() as db:
+        cursor = db.execute("""
+            UPDATE maintenance
+            SET status = 'Completed'
+            WHERE id = ?
+            AND status = 'Scheduled'
+        """, (maintenance_id,))
+
+        if cursor.rowcount == 0:
+            return "Maintenance record not found or already completed.", 404
+
+    return redirect(url_for("maintenance"))
 
 # START APPLICATION
 initialize_database()

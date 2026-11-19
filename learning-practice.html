@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Community hall</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Welcome to Community Hall</h1>
+        <p>Find and book community halls easily.
+            We make hall reservations simple.
+        </p>
+        <div class="notification">Welcome to Community Hall Management System!</div>
+        <h2>Our Available Facilities</h2>
+        <ul>
+            <li>Parking</li>
+            <li>Sound Systems</li>
+            <li>Stage</li>
+            <li>Seating Arrangement</li>            
+        </ul>
+        <h2>How to Book a Hall</h2>
+        <ol>
+            <li>View available halls</li>
+            <li>Select your preferred Hall</li>
+            <li>Choose your booking date</li>
+            <li>Submit your request</li>
+        </ol>
+        <h2>Explore</h2>
+        <a href = "https://www.google.com">Visit Google</a>        
+        <br><br>
+        <hr>
+        <main>
+            <section class="hall-card">
+                <h2>Community Hall A</h2>
+                <p>Capacity: 300 people</p>
+                <p>Location: Bengaluru</p>
+                <p>Status: Available</p>
+                <button id="bookButton">Book Now</button>
+                <div class="animation-box"></div>
+                <p id="message"></p>                
+            </section>
+        </main>
+        <h2>Community Hall Booking Form</h2>
+        <form>
+            <label>Full Name:</label>
+            <input type="text" placeholder="Enter your name" required>
+            <br><br>
+            <label>Email:</label>
+            <input type="email" placeholder="Enter your email" required>
+            <br><br>
+            <label>Phone Number:</label>
+            <input type="tel" placeholder="Enter Phone number">
+            <br><br>
+            <label>Number of people:</label>
+            <input type="number" min="1">
+            <br><br>
+            <label>Booking Date:</label>
+            <input type="date" required>
+            <br><br>
+            <label>Starting time:</label>
+            <input type="time">
+            <br><br>
+            <label>Ending time:</label>
+            <input type="time">
+            <br><br>
+            <label>Event Type:</label>
+            <select>
+                <option>Wedding</option>
+                <option>Birthday</option>
+                <option>Meeting</option>
+                <option>Other</option>
+            </select>
+            <br><br>
+            <select>
+                <option>Hall A</option>
+                <option>Hall B</option>
+                <option>Hall C</option>
+            </select>
+            <br><br>
+            <label>Event Description:</label>
+            <textarea placeholder="Enter the Event Description"></textarea>
+            <br><br>
+            <button type="Submit">Submit Booking</button>
+        </form>
+        <button>View Available Halls</button>
+        <h2>Community Hall Booking Schedule</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Customer Name</th>
+                    <th>Hall Name</th>
+                    <th>Booking Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>101</td>
+                    <td>Rahul</td>
+                    <td>Hall A</td>
+                    <td>2026-11-15</td>
+                    <td>Approved</td>
+                </tr>
+
+                <tr>
+                    <td>102</td>
+                    <td>Priya</td>
+                    <td>Hall B</td>
+                    <td>2026-11-16</td>
+                    <td>Pending</td>
+                </tr>
+
+                <tr>
+                    <td>103</td>
+                    <td>Arun</td>
+                    <td>Hall C</td>
+                    <td>2026-11-17</td>
+                    <td>Rejected</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="moving-box"></div>  
+        <script>
+            const button = document.getElementById("bookButton");
+            const message = document.getElementById("message");
+            button.addEventListener("click", function() {
+                message.textContent = "Booking request submmitted!";
+                button.textContent = "Request submmitted!";
+                button.disabled= true;
+            });
+        </script>
+    </body>
+</html>
